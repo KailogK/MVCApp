@@ -1,0 +1,134 @@
+﻿@model WebApplication3.Models.CreateProgramViewModel
+
+@{
+    ViewBag.Title = "Add Programs";
+}
+
+<link rel="stylesheet" href="/css/styles.css" type="text/css" />
+<style>
+    body {
+        background-image: url('/images/indexbg.jpg');
+        background-size: cover;
+        background-position: center;
+        background-color: #1e1e1e;
+        color: white;
+        font-family: Arial, sans-serif;
+    }
+
+    form {
+        width: 100%;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: transparent;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input[type="text"], textarea, input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        background-color: transparent;
+        border: 1px solid #ffffff;
+        color: white;
+        font-size: 14px;
+        border-radius: 5px;
+        box-sizing: border-box;
+        transition: border-color 0.3s ease;
+    }
+
+        input[type="text"]:focus, textarea:focus, input[type="number"]:focus {
+            border-color: #03e9f4;
+            outline: none;
+        }
+
+    button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 14px;
+        color: white;
+        background-color: transparent;
+        border: 2px solid #03e9f4;
+        border-radius: 5px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        button:hover {
+            background-color: #03e9f4;
+            color: #1e1e1e;
+            box-shadow: 0 0 10px #03e9f4, 0 0 20px #03e9f4, 0 0 30px #03e9f4;
+        }
+
+    .alert-success {
+        color: #fff;
+        background-color: #28a745;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+</style>
+<body>
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success" id="successMessage">
+        @TempData["Message"]
+    </div>
+}
+
+<div class="login-box">
+    <h2>Create new program</h2>
+<form asp-action="CreateProgram" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label asp-for="ProgramName"></label>
+        <input asp-for="ProgramName" />
+        <span asp-validation-for="ProgramName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Benefits"></label>
+        <textarea asp-for="Benefits"></textarea>
+        <span asp-validation-for="Benefits" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Charge"></label>
+        <input asp-for="Charge" type="number" />
+        <span asp-validation-for="Charge" class="text-danger"></span>
+    </div>
+
+    <center><button type="submit">Create Program</button></center><br />
+        <center><button onclick="location.href='@Url.Action("Home", "Admins")'" type="button">Return to Menu</button></center>
+
+</form>
+</div>
+</body>
+@section Scripts {
+    <script>
+        // Check if the success message exists
+        window.onload = function () {
+            var messageElement = document.getElementById("successMessage");
+
+            if (messageElement) {
+                setTimeout(function () {
+                    messageElement.style.display = "none"; // Hide the success message after 3 seconds
+                }, 3000); // 3000 milliseconds = 3 seconds
+            }
+        }
+    </script>
+}

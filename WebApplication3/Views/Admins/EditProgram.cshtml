@@ -1,0 +1,176 @@
+﻿@{
+    ViewBag.Title = "Edit Program";
+    var programs = ViewBag.Programs as List<WebApplication3.Models.Programme>;
+}
+
+<body>
+<style>
+        body {
+            background-image: url('/images/indexbg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-color: #1e1e1e;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+    form {
+        width: 80%;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: rgba(0, 0, 0, 0.7);
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    select, input[type="text"], textarea, input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        background-color: transparent;
+        border: 1px solid #ffffff;
+        color: white;
+        font-size: 14px;
+        border-radius: 5px;
+        box-sizing: border-box;
+        transition: border-color 0.3s ease;
+    }
+
+        select:focus, input:focus, textarea:focus {
+                border-color: #03e9f4;
+            outline: none;
+        }
+
+    button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 14px;
+        color: white;
+        background-color: transparent;
+        border: 2px solid #03e9f4;
+        border-radius: 5px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        button:hover {
+            background-color: #03e9f4;
+            color: #1e1e1e;
+            box-shadow: 0 0 10px #03e9f4, 0 0 20px #03e9f4, 0 0 30px #03e9f4;
+        }
+
+    .alert-success {
+        color: #fff;
+        background-color: #28a745;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+        select.transparent-input {
+            background-color: transparent; /* Makes the select transparent */
+            border: 1px solid white;
+            color: white;
+            padding: 5px;
+            font-size: 14px;
+            appearance: none; /* Removes default browser styling (like dropdown arrow) */
+            -webkit-appearance: none; /* For Safari */
+            -moz-appearance: none; /* For Firefox */
+        }
+
+            select.transparent-input option {
+                background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background for options */
+                color: white; /* Text color */
+            }
+
+                select.transparent-input option:hover {
+                    background-color: rgba(255, 255, 255, 0.2); /* Hover effect for options */
+                    color: #03e9f4;
+                }
+</style>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success" id="successMessage">
+        @TempData["Message"]
+    </div>
+}
+
+    <div class="login-box">
+        <h2>Edit existing programs</h2>
+<form asp-action="EditProgram" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label for="selectedProgramName">Select Program</label>
+                <select id="selectedProgramName" name="selectedProgramName" onchange="fetchProgramDetails(this)" class="transparent-input">
+            <option value="">-- Select a Program --</option>
+            @foreach (var program in programs)
+            {
+                <option value="@program.ProgramName">@program.ProgramName</option>
+            }
+        </select>
+    </div>
+
+    <div id="programDetails" style="display: none;">
+        <div class="form-group">
+            <label for="benefits">Benefits</label>
+            <textarea id="benefits" name="benefits"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="charge">Charge</label>
+            <input type="number" id="charge" name="charge" step="0.01" />
+        </div>
+
+                <center><button type="submit">Save Changes</button></center>
+    </div>
+</form>
+        <center><button onclick="location.href='@Url.Action("Home", "Admins")'" type="button">Return to Menu</button></center>
+
+</div>
+</body>
+
+<script>
+    const programData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(programs));
+
+    function fetchProgramDetails(selectElement) {
+        const selectedProgramName = selectElement.value;
+
+        if (!selectedProgramName) {
+            document.getElementById("programDetails").style.display = "none";
+            return;
+        }
+
+        const program = programData.find(p => p.ProgramName === selectedProgramName);
+
+        if (program) {
+            document.getElementById("benefits").value = program.Benefits;
+            document.getElementById("charge").value = program.Charge;
+            document.getElementById("programDetails").style.display = "block";
+        }
+    }
+
+    // Hide success message after 3 seconds
+    window.onload = function () {
+        const messageElement = document.getElementById("successMessage");
+        if (messageElement) {
+            setTimeout(() => {
+                messageElement.style.display = "none";
+            }, 3000);
+        }
+    };
+</script>

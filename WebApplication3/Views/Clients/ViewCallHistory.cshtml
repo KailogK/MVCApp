@@ -1,0 +1,95 @@
+﻿@model IEnumerable<dynamic>
+
+<style>
+    table {
+        width: 80%;
+        margin: 20px auto;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 15px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+        color: white;
+    }
+
+    table#callHistoryTable {
+        color: white;
+    }
+
+    tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.1); /* Subtle background for alternating rows */
+    }
+
+
+    body {
+        background-image: url('/images/indexbg.jpg');
+        background-size: cover;
+        background-position: center;
+        color: white;
+    }
+
+    h2 {
+        text-align: center;
+        font-size: 28px;
+        margin-bottom: 20px;
+        color: white;
+    }
+
+    button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 14px;
+        color: white;
+        background-color: transparent;
+        border: 2px solid #03e9f4;
+        border-radius: 5px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        button:hover {
+            background-color: #03e9f4;
+            color: #1e1e1e;
+            box-shadow: 0 0 10px #03e9f4, 0 0 20px #03e9f4, 0 0 30px #03e9f4;
+        }
+</style>
+
+<body>
+    <div class="login-box">
+        <center>
+            <h2>Call History</h2>
+            <table id="callHistoryTable">
+                <thead>
+                    <tr>
+                        <th>Call ID</th>
+                        <th>Date</th>
+                        <th>Duration (seconds)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var call in Model)
+                        {
+                            <tr>
+                                <td>@call.CallId</td>
+                                <td>@call.CallTime</td>
+                                <td>@call.Duration</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3">No call history available.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <button onclick="location.href='@Url.Action("Home", "Clients")'" type="button">Return to Menu</button>
+        </center>
+    </div>
+</body>

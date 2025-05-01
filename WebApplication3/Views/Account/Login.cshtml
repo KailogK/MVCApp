@@ -1,0 +1,123 @@
+﻿@model WebApplication3.Models.LoginViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/index.css" type="text/css">
+</head>
+<body>
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert-success" id="successMessage">
+            @TempData["Message"]
+        </div>
+    }
+    <center><img src="/images/Telecom.png" alt="Telecom" class="login-logo" /></center>
+    <div class="login-box">
+        <h2 id="h2">Login</h2>
+        <form method="post" asp-action="Login">
+            <input type="hidden" name="requestType" value="Login" />
+            <div class="user-box">
+                <input asp-for="Username" id="input1" oninput="check()" />
+                <label asp-for="Username">Username</label>
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="user-box">
+                <input asp-for="Password" type="password" id="input2" oninput="check()" />
+                <label asp-for="Password">password</label>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div id="errorMessage" style="color: red;">
+                @if (ViewBag.ErrorMessage != null)
+                {
+                    @ViewBag.ErrorMessage
+                }
+            </div>
+            <div id="Message" style="color: lime;">
+                @if (ViewBag.Message != null)
+                {
+                    @ViewBag.Message
+                }
+            </div>
+            <center>
+                <input type="submit" value="Submit" class="a" id="btn" disabled />
+            </center>
+            <center>
+                <b id="Reg" onmouseover="changeText()" onclick="redirect()">don't have an account?</b>
+            </center>
+        </form>
+    </div>
+</body>
+<script>
+    function changeText() {
+        var link = document.getElementById("Reg");
+        link.textContent = "Register";
+    }
+
+    function redirect() {
+        window.location.href = 'Account/Register';
+    }
+
+    function check() {
+        var input1 = document.getElementById("input1");
+        var input1Value = input1.value;
+
+        var input2 = document.getElementById("input2");
+        var input2Value = input2.value;
+
+        var button = document.getElementById("btn");
+
+        if (input1Value.length < 6 || input2Value.length < 6) {
+            button.disabled = true;
+        } else {
+            button.disabled = false;
+        }
+
+        document.getElementById("errorMessage").textContent = '';
+        document.getElementById("Message").textContent = '';
+    }
+
+        window.onload = function () {
+        var messageElement = document.getElementById("successMessage");
+
+        if (messageElement) {
+            setTimeout(function () {
+                messageElement.style.display = "none";
+            }, 3000); // 3000 milliseconds = 3 seconds
+        }
+    }
+</script>
+
+<style>
+    /* Style for the login-logo image */
+    .login-logo {
+        display: block;
+        margin: 0 auto 20px auto;
+        width: 250px; 
+        height: auto;
+        left: 50%;
+    }
+
+    body {
+        background-image: url('/images/indexbg.jpg');
+        background-size: cover;
+        background-position: center;
+        color: white;
+    }
+
+    .alert-success {
+        z-index: 9999;
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #fff;
+        background-color: #28a745;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+</style>
+</html>

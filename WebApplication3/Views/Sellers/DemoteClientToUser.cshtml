@@ -1,0 +1,18 @@
+﻿@model IEnumerable<WebApplication3.Models.Client>
+
+<h2>Demote Client to User</h2>
+
+<form asp-action="DemoteClientToUser" method="post">
+    <div class="form-group">
+        <label for="clientId">Select Client</label>
+        <select id="clientId" name="clientId" class="form-control">
+            <option value="">-- Select Client --</option>
+            @foreach (var client in ViewBag.Clients as List<WebApplication3.Models.Client>)
+            {
+                <option value="@client.ClientId">@client.User.Username (@client.User.FirstName @client.User.LastName)</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-danger">Demote to User</button>
+</form>

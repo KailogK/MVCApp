@@ -1,0 +1,176 @@
+﻿@model WebApplication3.Models.RegisterViewModel
+
+<body>
+    <style>
+        body {
+            background-image: url('/images/indexbg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-color: #1e1e1e;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .form-container {
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        select, input[type="text"], input[type="password"], input[type="number"], input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            background-color: transparent;
+            border: 1px solid #ffffff;
+            color: white;
+            font-size: 14px;
+            border-radius: 5px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+            select:focus, input:focus, textarea:focus {
+                border-color: #03e9f4;
+                outline: none;
+            }
+
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 18px;
+            color: white;
+            background-color: transparent;
+            border: 2px solid #03e9f4;
+            border-radius: 5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            button:hover {
+                background-color: #03e9f4;
+                color: #1e1e1e;
+                box-shadow: 0 0 10px #03e9f4, 0 0 20px #03e9f4, 0 0 30px #03e9f4;
+            }
+
+        .alert-success {
+            color: #fff;
+            background-color: #28a745;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        select.transparent-input {
+            background-color: transparent;
+            border: 1px solid white;
+            color: white;
+            padding: 5px;
+            font-size: 14px;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+            select.transparent-input option {
+                background-color: rgba(0, 0, 0, 0.8);
+                color: white;
+            }
+
+                select.transparent-input option:hover {
+                    background-color: rgba(255, 255, 255, 0.2);
+                    color: #03e9f4;
+                }
+
+    </style>
+
+    <div class="login-box">
+        <h2>Register a new Client</h2>
+
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert-success" id="successMessage">
+                @TempData["Message"]
+            </div>
+        }
+
+        <form method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label asp-for="FirstName"></label>
+                <input asp-for="FirstName" class="transparent-input" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="LastName"></label>
+                <input asp-for="LastName" class="transparent-input" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Username"></label>
+                <input asp-for="Username" class="transparent-input" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="AFM"></label>
+                <input asp-for="AFM" class="transparent-input" />
+                <span asp-validation-for="AFM" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PhoneNumber"></label>
+                <input asp-for="PhoneNumber" type="tel" class="transparent-input" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" type="password" class="transparent-input" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ConfirmPassword"></label>
+                <input asp-for="ConfirmPassword" type="password" class="transparent-input" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <center><button type="submit">Create Client</button></center>
+        </form>
+
+        <center><button onclick="location.href='@Url.Action("Home", "Sellers")'" type="button">Return to Menu</button></center>
+    </div>
+
+    <script>
+        window.onload = function () {
+            var messageElement = document.getElementById("successMessage");
+
+            if (messageElement) {
+                setTimeout(function () {
+                    messageElement.style.display = "none";
+                }, 3000); // 3000 milliseconds = 3 seconds
+            }
+        }
+    </script>
+
+</body>

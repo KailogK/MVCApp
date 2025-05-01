@@ -1,0 +1,210 @@
+﻿<body>
+    <style>
+        /* General form styling */
+        body {
+            background-image: url('/images/indexbg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-color: #1e1e1e;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        select, input[type="text"], input[type="hidden"], input[type="number"], input[type="tel"] {
+            width: 50%;
+            padding: 10px;
+            background-color: transparent;
+            border: 1px solid #ffffff;
+            color: white;
+            font-size: 14px;
+            border-radius: 5px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        select {
+            appearance: none; /* Removes default browser styling (like dropdown arrow) */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+            select option {
+                background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background for options */
+                color: white; /* Text color */
+            }
+
+                select option:hover {
+                    background-color: rgba(255, 255, 255, 0.2); /* Hover effect for options */
+                    color: #03e9f4;
+                }
+
+            select:focus {
+                border-color: #03e9f4;
+                outline: none;
+            }
+
+        /* Button styling */
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 14px;
+            color: white;
+            background-color: transparent;
+            border: 2px solid #03e9f4;
+            border-radius: 5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            button:hover {
+                background-color: #03e9f4;
+                color: #1e1e1e;
+                box-shadow: 0 0 10px #03e9f4, 0 0 20px #03e9f4, 0 0 30px #03e9f4;
+            }
+
+        /* Section headers */
+        h4 {
+            margin-top: 20px;
+            font-size: 18px;
+            text-decoration: underline;
+        }
+
+        .alert-success {
+            color: #fff;
+            background-color: #28a745;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success" id="successMessage">
+            @TempData["Message"]
+        </div>
+    }
+
+    <div class="login-box">
+        <h2>Assign program</h2>
+        <form asp-action="ChangeClientProgram" method="post">
+            @Html.AntiForgeryToken()
+
+            <!-- Client Selection -->
+            <center>
+                <div class="form-group">
+                    <label for="clientSelect">Select a client:</label><br>
+                    <select id="clientSelect" class="transparent-input" required>
+                        <option value="" disabled selected>-- Select Client --</option>
+                        @foreach (var phone in ViewBag.PhoneRecords)
+                        {
+                            <option value="@phone.PhoneNumber"
+                                    data-program-name="@phone.ProgramName"
+                                    data-program-benefits="@phone.Benefits"
+                                    data-program-charge="@phone.Charge">
+                                @phone.PhoneNumber
+                            </option>
+                        }
+                    </select>
+                </div>
+            </center>
+
+            <!-- Hidden Field to Store Selected Phone Number -->
+            <input type="hidden" id="phoneNumber" name="phoneNumber" />
+
+            <!-- Current Program Details -->
+            <center>
+                <div id="currentProgramDetails">
+                    <br />
+                    <p id="currentProgramName"></p>
+                    <p id="currentProgramBenefits"></p>
+                    <p id="currentProgramCharge"></p>
+                    <hr />
+                </div>
+            </center>
+
+            <!-- New Program Selection -->
+            <center>
+                <div class="form-group">
+                    <label for="programName">Select a new program to assign:</label><br>
+                    <select id="programName" name="programName" class="transparent-input" required>
+                        <option value="" disabled selected>-- Select Program --</option>
+                        @foreach (var program in ViewBag.Programs)
+                        {
+                            <option value="@program.ProgramName">@program.ProgramName</option>
+                        }
+                    </select>
+                </div>
+            </center>
+
+            <!-- New Program Details -->
+            <center>
+                <div id="programDetails">
+                    <br />
+                    <p id="programBenefits"></p>
+                    <p id="programCharge"></p>
+                    <hr />
+                </div>
+            </center>
+
+            <!-- Submit and Return Buttons -->
+            <center>
+                <button type="submit">Assign Program to Client</button>
+            </center>
+            <center>
+                <button onclick="location.href='@Url.Action("Home", "Sellers")'" type="button">Return to Menu</button>
+            </center>
+        </form>
+    </div>
+
+    <script>
+        // Handle client selection to display current program details and store the phone number
+        document.getElementById("clientSelect").addEventListener("change", function () {
+            const selectedOption = this.options[this.selectedIndex];
+            const phoneNumber = selectedOption.value;
+            const programName = selectedOption.getAttribute("data-program-name");
+            const programBenefits = selectedOption.getAttribute("data-program-benefits");
+            const programCharge = selectedOption.getAttribute("data-program-charge");
+
+            // Update the hidden field with the phone number
+            document.getElementById("phoneNumber").value = phoneNumber;
+
+            // Update the current program details
+            document.getElementById("currentProgramName").textContent =
+                "Current Program: " + (programName || "No program assigned");
+            document.getElementById("currentProgramBenefits").textContent =
+                "Benefits: " + (programBenefits || "N/A");
+            document.getElementById("currentProgramCharge").textContent =
+                "Charge: $" + (programCharge ? parseFloat(programCharge).toFixed(2) : "N/A");
+        });
+
+        // Handle program selection to display new program details
+        const programs = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Programs));
+        document.getElementById("programName").addEventListener("change", function () {
+            const selectedProgram = programs.find(p => p.ProgramName === this.value);
+            if (selectedProgram) {
+                document.getElementById("programBenefits").textContent =
+                    "Benefits: " + selectedProgram.Benefits;
+                document.getElementById("programCharge").textContent =
+                    "Charge: $" + selectedProgram.Charge.toFixed(2);
+            } else {
+                // Clear details if no program is selected
+                document.getElementById("programBenefits").textContent = "";
+                document.getElementById("programCharge").textContent = "";
+            }
+        });
+
+        // Check if the success message exists
+        window.onload = function () {
+            var messageElement = document.getElementById("successMessage");
+
+            if (messageElement) {
+                setTimeout(function () {
+                    messageElement.style.display = "none"; // Hide the success message after 3 seconds
+                }, 3000); // 3000 milliseconds = 3 seconds
+            }
+        }
+    </script>
+</body>

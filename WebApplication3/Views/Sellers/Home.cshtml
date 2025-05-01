@@ -1,0 +1,131 @@
+﻿@{
+    ViewData["Title"] = "Seller Home";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Seller Home</title>
+    <link rel="stylesheet" href="/css/styles.css" type="text/css" />
+    <style>
+        .login-box {
+            width: 800px;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        .review-button {
+            position: relative;
+            display: inline-block;
+            padding: 5px 10px;
+            color: #03e9f4;
+            font-size: 16px;
+            text-decoration: none;
+            text-transform: uppercase;
+            overflow: hidden;
+            transition: .25s;
+            letter-spacing: 2px;
+            background-color: transparent;
+            border: none;
+        }
+
+            .review-button:hover {
+                background: #03e9f4;
+                color: #fff;
+                border-radius: 5px;
+                box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4, 0 0 100px #03e9f4;
+            }
+
+        body {
+            background-image: url('/images/indexbg.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        hr {
+            border: 1px solid #03e9f4;
+            margin-bottom: 30px;
+        }
+
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 14px;
+            color: white;
+            background-color: transparent;
+            border: 2px solid #03e9f4;
+            border-radius: 5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            button:hover {
+                background-color: #03e9f4;
+                color: #1e1e1e;
+                box-shadow: 0 0 10px #03e9f4, 0 0 20px #03e9f4, 0 0 30px #03e9f4;
+            }
+
+        .alert-success {
+            color: #fff;
+            background-color: #28a745;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert-success" id="successMessage">
+            @TempData["Message"]
+        </div>
+    }
+    <div class="login-box">
+        <h2>Welcome back, @ViewBag.Username</h2>
+        <center>
+            <button onclick="location.href='@Url.Action("CreateNewClient", "Sellers")'" class="review-button">
+                Register new Client
+            </button>
+            <br><br>
+            <button onclick="location.href='@Url.Action("PromoteUserToClient", "Sellers")'" class="review-button">
+                Promote a User to a Client
+            </button>
+            <br><br>
+            <button onclick="location.href='@Url.Action("IssueBill", "Sellers")'" class="review-button">
+                Issue bills
+            </button>
+            <br><br>
+            <button onclick="location.href='@Url.Action("ChangeClientProgram", "Sellers")'" class="review-button">
+                Assign programs
+            </button>
+        </center>
+
+        <button onclick="location.href='@Url.Action("Login", "Account")'" type="button">
+            Logout
+        </button>
+    </div>
+</body>
+
+<script>
+    window.onload = function () {
+        var messageElement = document.getElementById("successMessage");
+
+        if (messageElement) {
+            setTimeout(function () {
+                messageElement.style.display = "none";
+            }, 3000); // 3000 milliseconds = 3 seconds
+        }
+    }
+</script>
+
+</html>

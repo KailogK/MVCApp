@@ -1,0 +1,108 @@
+﻿@{
+    ViewData["Title"] = "User Home";
+}
+
+<body style="background-image: url('/images/indexbg.jpg');">
+    <div class="login-box">
+        <h2>Welcome, @ViewBag.Username</h2>
+        <hr />
+        <h3>As a regular user, you don't have any options. Contact a Seller to promote you to a Customer.</h3>
+
+        <h3>Our Programs:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Program Name</th>
+                    <th>Benefits</th>
+                    <th>Charge (€)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var program in ViewBag.Programs)
+                {
+                    <tr>
+                        <td>@program.ProgramName</td>
+                        <td>@program.Benefits</td>
+                        <td>@program.Charge</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <center>
+            <button class="a" onclick="location.href='@Url.Action("Login", "Account")'" type="button">
+                Logout
+            </button>
+        </center>
+    </div>
+</body>
+
+<style>
+    body {
+        background-size: cover;
+        background-position: center;
+        color: white;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .login-box {
+        background-color: rgba(0, 0, 0, 0.7); /* Transparent background for contrast */
+        padding: 30px;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 600px;
+        box-shadow: 0 0 20px rgba(3, 233, 244, 0.6);
+    }
+
+    h2 {
+        text-align: center;
+        font-size: 36px;
+    }
+
+    h3 {
+        text-align: center;
+        font-size: 20px;
+        margin-top: 10px;
+    }
+
+    table {
+        width: 100%;
+        margin: 20px 0;
+        border-collapse: collapse;
+        color: white;
+    }
+
+    th, td {
+        padding: 15px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+    }
+
+    tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .a {
+        padding: 12px 24px;
+        font-size: 14px;
+        text-align: center;
+        color: white;
+        background-color: #03e9f4;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .a:hover {
+            background-color: #1e1e1e;
+            color: #03e9f4;
+            box-shadow: 0 0 10px #03e9f4, 0 0 20px #03e9f4, 0 0 30px #03e9f4;
+        }
+</style>

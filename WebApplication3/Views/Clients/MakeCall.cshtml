@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Make a Call";
+}
+
+<div class="container mt-5">
+    <h1>Make a Call</h1>
+    <hr />
+
+    <form method="post" action="@Url.Action("MakeCall", "Client")">
+        <div class="form-group">
+            <label for="Duration">Duration (seconds):</label>
+            <input type="number" class="form-control" id="Duration" name="Duration" required />
+        </div>
+
+        <button type="submit" class="btn btn-success mt-3">Submit</button>
+    </form>
+</div>

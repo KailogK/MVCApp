@@ -1,0 +1,104 @@
+﻿@{
+    ViewData["Title"] = "Admin Home";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Admin Home</title>
+    <link rel="stylesheet" href="/css/styles.css" type="text/css" />
+    <style>
+        .description {
+            display: none;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
+        .review-button {
+            position: relative;
+            display: inline-block;
+            padding: 5px 10px;
+            color: #03e9f4;
+            font-size: 16px;
+            text-decoration: none;
+            text-transform: uppercase;
+            overflow: hidden;
+            transition: .25s;
+            letter-spacing: 2px;
+            background-color: transparent;
+            border: none;
+        }
+
+            .review-button:hover {
+                background: #03e9f4;
+                color: #fff;
+                border-radius: 5px;
+                box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4, 0 0 100px #03e9f4;
+            }
+
+        .login-box {
+            width: 800px;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        body {
+            background-image: url('/images/indexbg.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 14px;
+            color: white;
+            background-color: transparent;
+            border: 2px solid #03e9f4;
+            border-radius: 5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            button:hover {
+                background-color: #03e9f4;
+                color: #1e1e1e;
+                box-shadow: 0 0 10px #03e9f4, 0 0 20px #03e9f4, 0 0 30px #03e9f4;
+            }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>Welcome back, @ViewBag.Username</h2>
+        <center>
+            <button onclick="location.href='@Url.Action("CreateSeller", "Admins")'" class="review-button">
+                Promote to Seller
+            </button>
+            <br><br>
+            <button onclick="location.href='@Url.Action("RemoveSeller", "Admins")'" class="review-button">
+                Demote from Seller
+            </button>
+            <br><br>
+            <button onclick="location.href='@Url.Action("CreateProgram", "Admins")'" class="review-button">
+                Create new programs
+            </button>
+            <br><br>
+            <button onclick="location.href='@Url.Action("EditProgram", "Admins")'" class="review-button">
+                Change program properties
+            </button>
+            <br><br>
+            <button onclick="location.href='@Url.Action("Login", "Account")'" type="button">
+                Logout
+            </button>
+        </center>
+    </div>
+</body>
+</html>
+
+
+

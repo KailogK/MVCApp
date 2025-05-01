@@ -1,0 +1,186 @@
+﻿@{
+    ViewBag.Title = "View Bill";
+}
+
+<style>
+    body {
+        background-image: url('/images/indexbg.jpg');
+        background-size: cover;
+        background-position: center;
+        color: white;
+    }
+
+    h1, h2, h3, p {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    h1 {
+        font-size: 32px;
+        margin-top: 20px;
+    }
+
+    h2 {
+        font-size: 26px;
+        margin-top: 20px;
+    }
+
+    h3 {
+        font-size: 22px;
+    }
+
+    table {
+        width: 80%;
+        margin: 20px auto;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 15px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+        color: white;
+    }
+
+    tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.1); /* Subtle background for alternating rows */
+    }
+
+    button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 14px;
+        color: white;
+        background-color: transparent;
+        border: 2px solid #03e9f4;
+        border-radius: 5px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+        margin: 15px auto;
+        display: block;
+    }
+
+        button:hover {
+            background-color: #03e9f4;
+            color: #1e1e1e;
+            box-shadow: 0 0 10px #03e9f4, 0 0 20px #03e9f4, 0 0 30px #03e9f4;
+        }
+
+    hr {
+        width: 80%;
+        margin: 20px auto;
+        border-color: #03e9f4;
+    }
+
+    p {
+        font-size: 18px;
+        text-align: left;
+    }
+
+    .bill-container {
+        margin: 30px auto;
+        padding: 20px; 
+        background-color: rgba(0, 0, 0, 0.6); /* Optional for contrast */
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(3, 233, 244, 0.5);
+        width: 200%; /* Adjust width to prevent full-page stretching */
+        transform: translateX(-25%); /* Re-center the element */
+        max-width: 1200px; /* Set a maximum width to prevent it from being too wide */
+    }
+
+        .bill-container hr {
+            margin: 20px auto;
+            border-color: #03e9f4;
+        }
+
+    .alert-success {
+        color: #fff;
+        background-color: #28a745;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+</style>
+
+<body>
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success" id="successMessage">
+            @TempData["Message"]
+        </div>
+    }
+    @if (ViewBag.BillDetails == null || !((List<object>)ViewBag.BillDetails).Any())
+    {
+        <p>@ViewBag.Message</p>
+    }
+    else
+    {
+    <h1>Unpaid Bills</h1>
+        foreach (var billDetail in (List<dynamic>)ViewBag.BillDetails)
+        {
+            <div class="bill-container">
+                <h2>Bill: @billDetail.Bill.BillId</h2>
+                <hr />
+                <p>A bill has been issued for the phone number: @billDetail.Bill.PhoneNumber</p>
+
+                @if (billDetail.Calls.Count == 0)
+                {
+                    <p>No calls to pay.</p>
+                }
+                else
+                {
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Call ID</th>
+                                <th>Duration (seconds)</th>
+                                <th>Cost (€)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var call in billDetail.Calls)
+                            {
+                                <tr>
+                                    <td>@call.CallId</td>
+                                    <td>@call.Duration</td>
+                                    <td>@call.Costs</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+
+                @if (billDetail.RemainingProgramPrice > 0)
+                {
+                    <p>Remaining Program Price: €@billDetail.RemainingProgramPrice</p>
+                }
+                else
+                {
+                    <p>Program is paid.</p>
+                }
+                <p><strong>Total Costs: €@billDetail.Bill.Costs</strong></p>
+                <hr />
+
+                <form action="@Url.Action("PayBill", "Clients")" method="post">
+                    <input type="hidden" name="billId" value="@billDetail.Bill.BillId" />
+                    <button type="submit">Pay This Bill</button>
+                </form>
+            </div>
+        }
+        <button onclick="location.href='@Url.Action("Home", "Clients")'" type="button">Return to Menu</button>
+    }
+</body>
+
+<script>
+    // Hide success message after 3 seconds
+    window.onload = function () {
+        const messageElement = document.getElementById("successMessage");
+        if (messageElement) {
+            setTimeout(() => {
+                messageElement.style.display = "none";
+            }, 3000);
+        }
+    };
+</script>

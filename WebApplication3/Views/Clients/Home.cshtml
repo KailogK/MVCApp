@@ -1,0 +1,140 @@
+﻿@{
+    ViewData["Title"] = "Client Home";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Client Home</title>
+    <link rel="stylesheet" href="/css/styles.css" type="text/css" />
+    <style>
+        body {
+            background-image: url('/images/indexbg.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+
+        .login-box {
+            width: 800px;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        hr {
+            border: 1px solid #03e9f4;
+            margin-bottom: 30px;
+        }
+
+        .review-button {
+            position: relative;
+            display: inline-block;
+            padding: 10px 20px;
+            color: #03e9f4;
+            font-size: 16px;
+            text-decoration: none;
+            text-transform: uppercase;
+            overflow: hidden;
+            transition: .25s;
+            letter-spacing: 2px;
+            background-color: transparent;
+            border: 2px solid #03e9f4;
+            border-radius: 5px;
+        }
+
+            .review-button:hover {
+                background: #03e9f4;
+                color: #fff;
+                border-radius: 5px;
+                box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4, 0 0 100px #03e9f4;
+            }
+
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 14px;
+            color: white;
+            background-color: transparent;
+            border: 2px solid #03e9f4;
+            border-radius: 5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            button:hover {
+                background-color: #03e9f4;
+                color: #1e1e1e;
+                box-shadow: 0 0 10px #03e9f4, 0 0 20px #03e9f4, 0 0 30px #03e9f4;
+            }
+
+        .form-group label {
+            color: white;
+        }
+
+        .form-control {
+            width: 25%;
+            margin: 0 auto 20px auto;
+            padding: 10px;
+            background: transparent;
+            color: white;
+            border: 2px solid #03e9f4;
+            border-radius: 5px;
+        }
+
+            .form-control:focus {
+                outline: none;
+                background: transparent; /* Keeps the background transparent */
+                border-color: #03e9f4;
+                box-shadow: 0 0 10px #03e9f4, 0 0 20px #03e9f4, 0 0 30px #03e9f4;
+                color: white; /* Ensures the text color remains visible */
+            }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h1>Welcome back, @ViewBag.Username</h1>
+        <hr />
+        <center>
+            <button onclick="location.href='@Url.Action("ViewBill", "Clients", new { username = ViewBag.Username })'" class="review-button">
+                My bills
+            </button>
+            <br><br>
+
+            <form action="@Url.Action("ViewCallHistory", "Clients")" method="post" style="display: inline;">
+                <input type="hidden" name="username" value="@ViewBag.Username" />
+                <button type="submit" class="review-button">
+                    Call history
+                </button>
+            </form>
+            <br><br>
+
+            <button onclick="location.href='@Url.Action("ViewPrograms", "Clients", new { username = ViewBag.Username })'" class="review-button">
+                View Programs
+            </button>
+            <br><br>
+
+
+            <form asp-action="MakeCall" asp-controller="Calls" method="post" style="display: inline;">
+                <div class="form-group">
+                    <label for="duration">Make a call (seconds)</label>
+                    <input type="number" id="duration" name="duration" class="form-control" required />
+                </div>
+                <input type="hidden" name="username" value="@ViewBag.Username" />
+                <button type="submit" class="review-button">Make a Call</button>
+            </form>
+            <br><br>
+
+            <button onclick="location.href='@Url.Action("Login", "Account")'" class="review-button">
+                Logout
+            </button>
+        </center>
+    </div>
+</body>
+</html>

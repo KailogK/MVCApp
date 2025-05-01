@@ -1,0 +1,207 @@
+﻿@model IEnumerable<WebApplication3.Models.User>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Promote a User to a Client</title>
+    <style>
+        body {
+            background-image: url('/images/indexbg.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+
+        .login-box {
+            width: 600px;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #03e9f4;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .transparent-input {
+            background-color: transparent;
+            border: 1px solid white;
+            color: white;
+            padding: 10px;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 5px;
+        }
+
+        select, input[type="text"], textarea, input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            background-color: transparent;
+            border: 1px solid #ffffff;
+            color: white;
+            font-size: 14px;
+            border-radius: 5px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+            select:focus, input:focus, textarea:focus {
+                border-color: #03e9f4;
+                outline: none;
+            }
+
+        select.transparent-input {
+            background-color: transparent; /* Makes the select transparent */
+            border: 1px solid white;
+            color: white;
+            padding: 5px;
+            font-size: 14px;
+            appearance: none; /* Removes default browser styling (like dropdown arrow) */
+            -webkit-appearance: none; /* For Safari */
+            -moz-appearance: none; /* For Firefox */
+        }
+
+            .transparent-input option {
+                background-color: rgba(0, 0, 0, 0.8);
+                color: white;
+            }
+
+                .transparent-input option:hover {
+                    background-color: rgba(255, 255, 255, 0.2);
+                    color: #03e9f4;
+                }
+
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 14px;
+            color: white;
+            background-color: transparent;
+            border: 2px solid #03e9f4;
+            border-radius: 5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            button:hover {
+                background-color: #03e9f4;
+                color: #1e1e1e;
+                box-shadow: 0 0 10px #03e9f4, 0 0 20px #03e9f4, 0 0 30px #03e9f4;
+            }
+
+        .description {
+            display: none;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success, .alert-danger {
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background-color: #28a745;
+        }
+
+        .alert-danger {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+        @if (TempData["Message"] != null)
+        {
+        <div class="alert-success" id="successMessage">
+                @TempData["Message"]
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert-danger" id="errorMessage">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+    <div class="login-box">
+        <h2>Promote User to Client</h2>
+
+        <form asp-action="PromoteUserToClient" method="post">
+            <div class="form-group">
+                <label for="userId">Select User</label>
+                <select id="userId" name="userId" class="transparent-input" onchange="fetchUserDetails(this)">
+                    <option value="" disabled selected>-- Select User --</option>
+                    @foreach (var user in ViewBag.Users as List<WebApplication3.Models.User>)
+                    {
+                        <option value="@user.UserId">@user.Username (@user.FirstName @user.LastName)</option>
+                    }
+                </select>
+            </div>
+
+            <div id="userDetails" style="display: none;">
+                <div class="form-group">
+                    <label for="afm">AFM</label>
+                    <input id="afm" name="afm" class="transparent-input" />
+                </div>
+
+                <div class="form-group">
+                    <label for="phoneNumber">Phone Number</label>
+                    <input id="phoneNumber" name="phoneNumber" class="transparent-input" />
+                </div>
+
+                <button type="submit">Promote to Client</button>
+            </div>
+        </form>
+
+        <br />
+        <button onclick="location.href='@Url.Action("Home", "Sellers")'" type="button">Return to Menu</button>
+    </div>
+
+    <script>
+        const usersData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Users));
+
+        function fetchUserDetails(selectElement) {
+            const selectedUserId = selectElement.value;
+
+            if (!selectedUserId) {
+                document.getElementById("userDetails").style.display = "none";
+                return;
+            }
+
+            const user = usersData.find(u => u.UserId == selectedUserId);
+
+            if (user) {
+                document.getElementById("userDetails").style.display = "block";
+            }
+        }
+
+        // Hide success message after 3 seconds
+        window.onload = function () {
+            const successMessage = document.getElementById("successMessage");
+            const errorMessage = document.getElementById("errorMessage");
+
+            if (successMessage) {
+                setTimeout(() => successMessage.style.display = "none", 3000);
+            }
+
+            if (errorMessage) {
+                setTimeout(() => errorMessage.style.display = "none", 3000);
+            }
+        };
+    </script>
+</body>
+</html>
